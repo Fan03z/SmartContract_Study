@@ -1,0 +1,117 @@
+{
+	"compiler": {
+		"version": "0.8.7+commit.e28d00a7"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [],
+				"name": "createSimpleStorageContract",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_simpleStorageIndex",
+						"type": "uint256"
+					}
+				],
+				"name": "sfSet",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_simpleStorageIndex",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_simpleStorageNumber",
+						"type": "uint256"
+					}
+				],
+				"name": "sfStore",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "simpleStorageArray",
+				"outputs": [
+					{
+						"internalType": "contract SimpleStorage",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"solidityStudy/Lesson2/StorageFactory.sol": "StorageFactory"
+		},
+		"evmVersion": "london",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"solidityStudy/Lesson2/SimpleStorage.sol": {
+			"keccak256": "0x6ee884f42bb36aab5d539b71e9632b13398d8bec1ada958540ac221be8903445",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://a63fd730f2e1b770e1a23318acf023680cea83c1d47caf8bf52323c50251b6b4",
+				"dweb:/ipfs/QmePZsuDdyw178Bc1PQfa3LMn42YitJf7XU3LzMV8Wkz2f"
+			]
+		},
+		"solidityStudy/Lesson2/StorageFactory.sol": {
+			"keccak256": "0x9451305d917609ccd5da6ffa859da03426ad15767123d179ea744652c392fae5",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://2d28fdc1d86a79bc86a4b4e65fbbe2d1fc573b132fb8b2ac84be84550513da9d",
+				"dweb:/ipfs/QmZC7PDYEN5E6qoZLS3okP3NHHXAZ5HufdYn6ULwJiZ9kP"
+			]
+		}
+	},
+	"version": 1
+}

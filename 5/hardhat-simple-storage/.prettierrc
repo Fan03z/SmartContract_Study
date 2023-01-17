@@ -1,0 +1,9 @@
+{
+  "tabWidth": 2,
+  "useTabs": false,
+
+  "semi的含义": "句尾是否加分号",
+  "semi": true,
+
+  "singleQuote": false
+}

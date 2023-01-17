@@ -1,0 +1,4 @@
+# .env 以后最好还是加上
+# .env
+node_modules
+.encryptedKey.json
