@@ -17,7 +17,7 @@ contract FundMe {
     // 在 存储变量名 前加上 s_;
     // 在 不可变量(immutable)名 前加上 i_;
     //  常量(constant)名 用大写锁定表示;
-    uint256 public constant MINIMUM_USD = 50 * 1e18;
+    uint256 public constant MINIMUM_USD = 0 * 10e18;
     address[] private s_funders;
     mapping(address => uint256) private s_addressToAmountFunded;
     address private immutable i_owner;
