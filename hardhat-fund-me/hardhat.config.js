@@ -47,6 +47,10 @@ module.exports = {
       // 默认将第一个帐户作为部署者
       default: 0,
     },
+    player: {
+      // 默认将第二个帐户作为玩家
+      default: 1,
+    },
   },
 
   etherscan: {

@@ -1,5 +1,6 @@
 node_modules
-.env
+# 最好还是将.env加进来,这里只是学习示范
+# .env
 coverage
 coverage.json
 typechain
@@ -7,6 +8,6 @@ typechain-types
 deployments
 
 # Hardhat files
-cache
 artifacts
+cache
 
