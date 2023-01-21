@@ -25,6 +25,7 @@ contract Raffle is VRFConsumerBaseV2, AutomationCompatibleInterface {
         OPEN, // 开放活动
         CALCULATING // 清算获胜玩家中
     }
+    // RaffleState内被字符串化时,"0" == RaffleState.OPEN,"1" == RaffleState.CALCULATING
 
     // 定义参与活动的金额
     uint256 private immutable i_entranceFee;
@@ -244,5 +245,9 @@ contract Raffle is VRFConsumerBaseV2, AutomationCompatibleInterface {
 
     function getRequestConfirmations() public pure returns (uint256) {
         return REQUEST_CONFIRMATIONS;
+    }
+
+    function getInterval() public view returns (uint256) {
+        return i_interval;
     }
 }

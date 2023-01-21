@@ -61,14 +61,12 @@ module.exports = {
     },
   },
 
-  /*
-  // !!!要全局加增强 (暂时注释了先)
+  // !!!要全局加增强 (暂时将enabled改为false,禁用先)
   gasReporter: {
-    enabled: true,
+    enabled: false,
     currency: "USD",
     outputFile: "gas-report.txt",
     noColors: true,
     coinmarketcap: COINMARKETCAP_API_KEY,
   },
-  */
 };
