@@ -46,4 +46,8 @@ module.exports = {
       default: 1,
     },
   },
+  mocha: {
+    // 设置200秒为响应超时时长
+    timeout: 200000,
+  },
 };

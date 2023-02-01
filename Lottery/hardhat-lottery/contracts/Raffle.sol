@@ -179,6 +179,7 @@ contract Raffle is VRFConsumerBaseV2, AutomationCompatibleInterface {
         );
         // 触发请求得到Raffle赢家事件
         emit RequestedRaffleWinner(requestId);
+        // 其实在requestRandomWords()内就会触发事件 RandomWordsRequested ,且返回参数中包含了requestId
     }
 
     // fulfillRandomWords()在"@chainlink/contracts/src/v0.8/VRFConsumerBaseV2.sol"合约文件中已经定义为内部虚函数了
