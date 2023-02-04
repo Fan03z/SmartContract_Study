@@ -21,13 +21,15 @@ developmentChains.includes(network.name)
 
       describe("fulfillRandomWords", function () {
         it("通过实时的Chainlink keepers和Chainlink VRF得到一个随机赢家", async function () {
+          console.log("设置测试中...");
           // 记录一开始的时间戳
           const startingTimeStamp = await raffle.getLatestTimeStamp();
           // 获得参与活动账户
           const accounts = await ethers.getSigners();
 
-          // 设置promise和事件监听
-          await new promise(async (resolve, reject) => {
+          console.log("设置监听器...");
+          // 设置promise和事件监听;
+          await new Promise(async (resolve, reject) => {
             raffle.once("WinnerPicked", async () => {
               console.log("已触发WinnerPicked事件");
               try {
@@ -53,12 +55,11 @@ developmentChains.includes(network.name)
                 // 时间流逝
                 assert(endingTimeStamp > startingTimeStamp);
                 resolve();
-              } catch (e) {
-                console.log(e);
-                reject(e);
+              } catch (error) {
+                console.log(error);
+                reject(error);
               }
             });
-
             console.log("参与活动中...");
             const tx = await raffle.enterRaffle({ value: raffleEntranceFee });
             await tx.wait(1);

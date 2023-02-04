@@ -46,8 +46,13 @@ module.exports = {
       default: 1,
     },
   },
+  etherscan: {
+    apiKey: {
+      goerli: ETHERSCAN_API_KEY,
+    },
+  },
   mocha: {
-    // 设置200秒为响应超时时长
-    timeout: 200000,
+    // 设置500秒为响应超时时长
+    timeout: 500000,
   },
 };

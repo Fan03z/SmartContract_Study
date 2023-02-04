@@ -13,6 +13,7 @@ const networkConfig = {
       "0x79d3d8832d904592c0bf9818b621522c988bb8b0c05cdc3b15aea1b6e8db0c15",
     // 订阅Id获取及查询: https://vrf.chain.link/
     // Link获得: https://docs.chain.link/resources/link-token-contracts/
+    // upKeeper查询和添加地址: https://automation.chain.link/
     subscriptionId: "9356",
     callbackGasLimit: "500000",
     interval: "30",
