@@ -2,6 +2,10 @@
 
 > 项目运行命令: yarn run dev
 
+> 添加 react-moralis: yarn add moralis react-moralis
+
+> 若出现错误 Can't resolve 'moralis-v1' ,则需添加包 moralis-v1 : yarn add --dev moralis-v1
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
