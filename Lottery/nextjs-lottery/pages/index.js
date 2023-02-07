@@ -19,8 +19,10 @@ export default function Home() {
       </Head>
       <main className={styles.main}>
         {/* <ManualHeader /> */}
-        <Header />
-        <LotteryEntrance />
+        <div>
+          <Header />
+          <LotteryEntrance />
+        </div>
       </main>
     </>
   );
