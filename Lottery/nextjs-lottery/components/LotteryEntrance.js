@@ -22,7 +22,11 @@ export default function LotteryEntrance() {
   const disPatch = useNotification();
 
   // runContractFunction既可以发送交易,也可以读取调用合约方法的状态
-  const { runContractFunction: enterRaffle } = useWeb3Contract({
+  const {
+    runContractFunction: enterRaffle,
+    isLoading,
+    isFetching,
+  } = useWeb3Contract({
     abi: abi,
     contractAddress: raffleAddress,
     functionName: "enterRaffle",
@@ -94,11 +98,12 @@ export default function LotteryEntrance() {
   };
 
   return (
-    <div>
+    <div className="p-5">
       enterRaffle{" "}
       {raffleAddress ? (
         <div>
           <button
+            className="bg-blue-400 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded ml-auto"
             onClick={async function () {
               // 传入对象,定义调用成功或失败后的反馈
               await enterRaffle({
@@ -106,12 +111,20 @@ export default function LotteryEntrance() {
                 onError: (error) => console.log(error),
               });
             }}
+            // 如果合约交易正在获取或者加载时,禁用此按钮
+            disabled={isLoading || isFetching}
           >
-            Enter Raffle
+            {isLoading || isFetching ? (
+              <div className="animate-spin spinner-border h-8 w-8 border-b-2 rounded-full"></div>
+            ) : (
+              <div>Enter Raffle</div>
+            )}
           </button>
-          Entrance Fee : {ethers.utils.formatUnits(entranceFee, "ether")} ETH
-          Number Of Players: {numberOfPlayers}
-          Recent Winner: {recentWinner}
+          <div>
+            Entrance Fee : {ethers.utils.formatUnits(entranceFee, "ether")} ETH
+          </div>
+          <div>Number Of Players: {numberOfPlayers}</div>
+          <div>Recent Winner: {recentWinner}</div>
         </div>
       ) : (
         <div>No Raffle Address Deteched</div>

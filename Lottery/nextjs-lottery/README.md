@@ -1,46 +1,28 @@
 > NextJS 前端框架安装命令: yarn create next-app .
-
+>
 > 项目运行命令: yarn run dev
 
 > 添加 react-moralis: yarn add moralis react-moralis
 
 > 若出现错误 Can't resolve 'moralis-v1' ,则需添加包 moralis-v1 : yarn add --dev moralis-v1
 
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+> Tailwind 操作参考: https://tailwindcss.com/docs/guides/nextjs
+>
+> NextJS 项目安装 Tailwind: yarn add --dev tailwindcss postcss autoprefixer
+>
+> 初始化项目中 Tailwind 配置: yarn tailwindcss init -p
 
-## Getting Started
-
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
-
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
-
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+> 将前端代码 host 到 ipfs 上托管:
+>
+> 1、ipfs 没有运行代码的能力,要生成静态的 HTML: yarn next build
+>
+> 2、将静态的 HTML 整合到生成的 out 文件夹中,注意有非静态代码存在时不会成功: yarn next export
+>
+> 注意: 要在 next.config.js 上的
+> `module.exports = {
+images: {
+  unoptimized: true,
+},
+nextConfig,
+};`
+> 加上 images,取消默认第三方图像优化,不然 yarn next export 报错
