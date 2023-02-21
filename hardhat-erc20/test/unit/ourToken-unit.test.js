@@ -9,7 +9,7 @@ const {
   ? describe.skip
   : describe("OurToken Unit Test", function () {
       // 设置科学记数法变量,方便后续使用
-      const multilier = 10 ** 18;
+      const multiplier = 10 ** 18;
       let ourToken, deployer, user1;
 
       beforeEach(async function () {
@@ -48,22 +48,22 @@ const {
         });
         it("Test5.调用trandfer()时,触发transfer事件", async function () {
           expect(
-            await ourToken.transfer(user1, (10 * multilier).toString())
-          ).to.emit(OurToken, "Transfer");
+            await ourToken.transfer(user1, (10 * multiplier).toString())
+          ).to.emit(ourToken, "Transfer");
         });
       });
 
       // 测试allowance授权系列功能
       describe("allowances", function () {
-        const amount = (20 * multilier).toString();
+        const amount = (20 * multiplier).toString();
         beforeEach(async function () {
           playerToken = await ethers.getContract("OurToken", user1);
         });
         it("Test6.授权其他地址转移代币", async function () {
-          const tokenToSpend = ethers.utils.parseEther("5");
-          await ourToken.approve(user1, tokenToSpend);
-          await playerToken.transferFrom(deployer, user1, tokenToSpend);
-          assert.equal(await playerToken.balanceOf(user1), tokenToSpend);
+          const tokensToSpend = ethers.utils.parseEther("5");
+          await ourToken.approve(user1, tokensToSpend);
+          await playerToken.transferFrom(deployer, user1, tokensToSpend);
+          expect(await playerToken.balanceOf(user1)).to.equal(tokensToSpend);
         });
         it("Test7.未被授权的用户不允许发起代币转移", async function () {
           await expect(
@@ -84,7 +84,11 @@ const {
         it("Test10.不允许转移超额的授权代币", async function () {
           await ourToken.approve(user1, amount);
           await expect(
-            playerToken.transferFrom(deployer, user1, amount * 2)
+            playerToken.transferFrom(
+              deployer,
+              user1,
+              (40 * multiplier).toString()
+            )
           ).to.be.revertedWith("ERC20: insufficient allowance");
         });
       });
