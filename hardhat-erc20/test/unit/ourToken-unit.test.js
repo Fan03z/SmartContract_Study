@@ -1,4 +1,4 @@
-const { assert } = require("chai");
+const { assert, expect } = require("chai");
 const { network, getNamedAccounts, deployments, ethers } = require("hardhat");
 const {
   developmentChains,
@@ -32,16 +32,60 @@ const {
           assert.equal(totalSupply.toString(), INITIAL_SUPPLY);
         });
         it("Test3.正确地初始化代币的名称和标志", async function () {
-          const name = await ourToken.name;
-          assert.equal(name.toString(), "FanToken");
-          const symbol = await ourToken.symbol;
-          assert.equal(symbol.toString(), "FT");
+          const name = (await ourToken.name()).toString();
+          assert.equal(name, "FanToken");
+          const symbol = (await ourToken.symbol()).toString();
+          assert.equal(symbol, "FT");
         });
       });
 
       // 测试transfer()
       describe("transfer", function () {
-        it("Test4.成功将代币转移到另一地址", async function () {});
-        it("Test5.调用trandfer()时,触发transfer事件", async function () {});
+        it("Test4.成功将代币转移到另一地址", async function () {
+          const tokensToSend = ethers.utils.parseEther("10");
+          await ourToken.transfer(user1, tokensToSend);
+          expect(await ourToken.balanceOf(user1)).to.equal(tokensToSend);
+        });
+        it("Test5.调用trandfer()时,触发transfer事件", async function () {
+          expect(
+            await ourToken.transfer(user1, (10 * multilier).toString())
+          ).to.emit(OurToken, "Transfer");
+        });
+      });
+
+      // 测试allowance授权系列功能
+      describe("allowances", function () {
+        const amount = (20 * multilier).toString();
+        beforeEach(async function () {
+          playerToken = await ethers.getContract("OurToken", user1);
+        });
+        it("Test6.授权其他地址转移代币", async function () {
+          const tokenToSpend = ethers.utils.parseEther("5");
+          await ourToken.approve(user1, tokenToSpend);
+          await playerToken.transferFrom(deployer, user1, tokenToSpend);
+          assert.equal(await playerToken.balanceOf(user1), tokenToSpend);
+        });
+        it("Test7.未被授权的用户不允许发起代币转移", async function () {
+          await expect(
+            playerToken.transferFrom(deployer, user1, amount)
+          ).to.be.revertedWith("ERC20: insufficient allowance");
+        });
+        it("Test8.调起approve()时,触发Approval事件", async function () {
+          await expect(ourToken.approve(user1, amount)).to.emit(
+            ourToken,
+            "Approval"
+          );
+        });
+        it("Test9.授权的代币数量准确", async function () {
+          await ourToken.approve(user1, amount);
+          const allowance = await ourToken.allowance(deployer, user1);
+          assert.equal(allowance.toString(), amount);
+        });
+        it("Test10.不允许转移超额的授权代币", async function () {
+          await ourToken.approve(user1, amount);
+          await expect(
+            playerToken.transferFrom(deployer, user1, amount * 2)
+          ).to.be.revertedWith("ERC20: insufficient allowance");
+        });
       });
     });
