@@ -1,7 +1,6 @@
 .encryptedKey.json
 # vscode
 .vscode
-typechain-types
 
 # hardhat
 artifacts
@@ -10,7 +9,6 @@ deployments
 node_modules
 coverage
 coverage.json
-typechain
 
 # don't push the environment vars!
 # .env
@@ -99,3 +97,7 @@ lint/generated/
 lint/outputs/
 lint/tmp/
 # lint/reports/
+
+gas-report.txt
+.issue.md
+typechain-types
