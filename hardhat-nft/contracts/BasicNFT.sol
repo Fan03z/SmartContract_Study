@@ -4,7 +4,7 @@ pragma solidity ^0.8.7;
 // 通过@openzeppelin/contracts包导入ERC721标准合约
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
-contract BasicNFT is ERC721 {
+contract BasicNft is ERC721 {
     // 设置常量令牌URI
     string public constant TOKEN_URI =
         "ipfs://bafybeig37ioir76s7mg5oobetncojcm3c3hxasyd4rvid4jqhy4gkaheg4/?filename=0-PUG.json";
@@ -19,7 +19,7 @@ contract BasicNFT is ERC721 {
     }
 
     // 铸造NFT
-    function mintNFT() public returns (uint256) {
+    function mintNft() public returns (uint256) {
         // 调用ERC721.sol上的_safeMint()铸造NFT
         // 将铸造的令牌给予msg.sender,还要传入令牌ID
         _safeMint(msg.sender, s_tokenCounter);
