@@ -1,0 +1,15 @@
+# 删除项目中的所有.DS_Store。这会跳过不在项目中的 .DS_Store
+#   find . -name .DS_Store -print0 | xargs -0 git rm -f --ignore-unmatch
+#   上面不行试试下面的:
+#   find . -name .DS_Store -print0 | xargs -0 git rm --ignore-unmatch
+# 将 .DS_Store 加入到 .gitignore
+#   echo .DS_Store >> ~/.gitignore
+# 更新项目
+#   git add --all
+#   git commit -m '.DS_Store banished!'
+
+# 禁止.DS_store生成:
+# defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool TRUE
+# 恢复.DS_store生成:
+# defaults delete com.apple.desktopservices DSDontWriteNetworkStores
+.DS_Store
