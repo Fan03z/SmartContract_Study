@@ -85,6 +85,14 @@ module.exports = async function (hre) {
     waitConfirmations: network.config.blockConfirmations || 1,
   });
 
+  // 在本地测试网上,为合约VRFCoordinatorV2Mock手动添加订阅消费者
+  // 否则本地测试时可能在expect错误上过不去
+  // 从而在Test5上出现错误: VM Exception while processing transaction: reverted with custom error 'InvalidConsumer()'
+  if (developmentChains.includes(network.name)) {
+    const vrfCoordinatorV2 = await ethers.getContract("VRFCoordinatorV2Mock");
+    await vrfCoordinatorV2.addConsumer(subscriptionId, randomIpfsNft.address);
+  }
+
   log("----------------------");
 
   if (

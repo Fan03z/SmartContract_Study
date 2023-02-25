@@ -16,6 +16,8 @@ error RandomIpfsNft__RangeOutOfBounds();
 error RandomIpfsNft__NeedMoreETHSent();
 // 定义退款失败提示错误
 error RandomIpfsNft__TransferFailed();
+// 定义令牌已经被赋值过了提示错误
+error RandomIpfsNft__AlreadyInitialized();
 
 contract RandomIpfsNft is VRFConsumerBaseV2, ERC721URIStorage, Ownable {
     // 当铸造NFT时,要触发ChainLink VRF call,并得到个随机数
@@ -50,6 +52,8 @@ contract RandomIpfsNft is VRFConsumerBaseV2, ERC721URIStorage, Ownable {
     string[] internal s_dogTokenUris;
     // 铸造费用
     uint256 internal i_mintFee;
+    // 判断是否已经得到令牌Uris
+    bool private s_initialized;
 
     // VRF Helpers
     // 创建映射,使得发出随机数请求后随机数对应NFT给到的是用户,而不是ChainLink节点
@@ -73,7 +77,7 @@ contract RandomIpfsNft is VRFConsumerBaseV2, ERC721URIStorage, Ownable {
         i_subscriptionId = subscriptionId;
         i_gasLane = gasLane;
         i_callbackGasLimit = callbackGasLimit;
-        s_dogTokenUris = dogTokenUris;
+        _initializeContract(dogTokenUris);
         i_mintFee = mintFee;
     }
 
@@ -126,6 +130,17 @@ contract RandomIpfsNft is VRFConsumerBaseV2, ERC721URIStorage, Ownable {
         }
     }
 
+    // 判断是否得到令牌Uris
+    function _initializeContract(string[3] memory dogTokenUris) private {
+        // 初始_initializeContract()未经调用时,s_initialized未被赋值,不会revert
+        if (s_initialized) {
+            revert RandomIpfsNft__AlreadyInitialized();
+        }
+        s_dogTokenUris = dogTokenUris;
+        // 更新s_initialized,保证令牌Uri更新,并保证此函数只会在构造函数上被调用一次
+        s_initialized = true;
+    }
+
     // 根据随机数获得狗品种
     function getBreedFromModdedRng(
         uint256 moddedRng
@@ -163,5 +178,9 @@ contract RandomIpfsNft is VRFConsumerBaseV2, ERC721URIStorage, Ownable {
 
     function getTokenCounter() public view returns (uint256) {
         return s_tokenCounter;
+    }
+
+    function getInitialized() public view returns (bool) {
+        return s_initialized;
     }
 }
