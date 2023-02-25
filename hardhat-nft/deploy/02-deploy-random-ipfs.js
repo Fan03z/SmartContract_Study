@@ -33,7 +33,13 @@ module.exports = async function (hre) {
   const chainId = network.config.chainId;
 
   // 整理令牌
-  let tokenUris;
+  // let tokenUris;
+  // 得到tokenUris之后就可以直接定义了
+  let tokenUris = [
+    "ipfs://QmX3KstJD9MjLZLAkF3uNA68K1anxxBT2CbRTwkhPM2zce",
+    "ipfs://QmR3Y9SquvAqQpJiQPfGmrqA4WWAxQt9BTeFc3Y45hXrtE",
+    "ipfs://QmdYKgxDEsVYi99TfoMjTCywK6CJHYVoUtgd1HjmT2pdt4",
+  ];
   // 获得NFT图像的IPFS哈希值
   // 存储方式:
   // 1.通过本地的IPFS节点,
@@ -62,19 +68,39 @@ module.exports = async function (hre) {
   log("----------------------");
 
   // 传入部署RandomIpfsNft.sol中的参数
-  // const args = [
-  //   vrfCoordinatorV2Address,
-  //   subscriptionId,
-  //   networkConfig[chainId].gasLane,
-  //   networkConfig[chainId].callbackGasLimit,
-  //   // tokenUris
-  //   networkConfig[chainId].mintFee,
-  // ];
+  const args = [
+    vrfCoordinatorV2Address,
+    subscriptionId,
+    networkConfig[chainId].gasLane,
+    networkConfig[chainId].callbackGasLimit,
+    tokenUris,
+    networkConfig[chainId].mintFee,
+  ];
+
+  // 部署RandomIpfsNft.sol
+  const randomIpfsNft = await deploy("RandomIpfsNft", {
+    from: deployer,
+    args: args,
+    log: true,
+    waitConfirmations: network.config.blockConfirmations || 1,
+  });
+
+  log("----------------------");
+
+  if (
+    !developmentChains.includes(network.name) &&
+    process.env.ETHERSCAN_API_KEY
+  ) {
+    log("确认中...");
+    await verify(randomIpfsNft.address, args);
+  }
 };
 
 // 处理令牌URI并返回获得处理后的令牌URI
 async function handleTokenUris() {
-  tokenUris = [];
+  // 在得到tokenUris之后就可以注释掉了,直接在上面定义就好了
+  // tokenUris = [];
+
   // 调用storeImages(),其中方法返回的responses里有每一个上传文件的哈希值,获得上传返回数据
   const { responses: imageUploadResponses, files } = await storeImages(
     imagesLocation

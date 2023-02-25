@@ -15,7 +15,7 @@
     "ethereum-waffle": "^3.4.0",
     "ethers": "^5.5.4",
     "fs": "^0.0.1-security",
-    "hardhat": "^2.9.0",
+    "hardhat": "^2.12.7",
     "hardhat-deploy": "^0.10.5",
     "hardhat-gas-reporter": "^1.0.7",
     "mime": "^3.0.0",

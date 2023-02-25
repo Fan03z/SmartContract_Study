@@ -108,6 +108,8 @@ contract RandomIpfsNft is VRFConsumerBaseV2, ERC721URIStorage, Ownable {
         // 控制随机数落在0-99
         uint256 moddedRng = randomWords[0] % MAX_CHANCE_VALUE;
         Breed dogBreed = getBreedFromModdedRng(moddedRng);
+        // 更新令牌计数器
+        s_tokenCounter++;
         _safeMint(dogOwner, newTokenId);
         // 根据Dog品种索引检索s_dogTokenUris[],从而设置对应的URI
         _setTokenURI(newTokenId, s_dogTokenUris[uint256(dogBreed)]);
