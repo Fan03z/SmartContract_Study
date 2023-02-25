@@ -51,6 +51,8 @@ const { developmentChains } = require("../../helper-hardhat-config");
 
       // 测试fulfillRandomWords()
       describe("fulfillRandomWords", function () {
+        // 💔!!!!
+        // 会报错: VM Exception while processing transaction: reverted with custom error 'InsufficientBalance()'
         it("Test5.返回随机数并成功铸造NFT", async function () {
           //
           await new Promise(async (resolve, reject) => {
