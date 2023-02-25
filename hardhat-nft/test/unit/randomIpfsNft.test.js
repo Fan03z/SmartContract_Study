@@ -51,7 +51,7 @@ const { developmentChains } = require("../../helper-hardhat-config");
 
       // 测试fulfillRandomWords()
       describe("fulfillRandomWords", function () {
-        // 💔!!!!
+        // 💔
         // 会报错: VM Exception while processing transaction: reverted with custom error 'InsufficientBalance()'
         it("Test5.返回随机数并成功铸造NFT", async function () {
           //
@@ -74,10 +74,12 @@ const { developmentChains } = require("../../helper-hardhat-config");
                 value: fee.toString(),
               });
               const requestNftReceipt = await requestNftResponse.wait(1);
+              // 💔问题应该出在这
               await vrfCoordinatorV2Mock.fulfillRandomWords(
                 requestNftReceipt.events[1].args.requestId,
                 randomIpfsNft.address
               );
+              //💔
             } catch (e) {
               console.error(e);
               reject(e);
