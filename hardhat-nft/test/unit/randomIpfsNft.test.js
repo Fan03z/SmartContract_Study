@@ -74,12 +74,12 @@ const { developmentChains } = require("../../helper-hardhat-config");
                 value: fee.toString(),
               });
               const requestNftReceipt = await requestNftResponse.wait(1);
-              // 💔问题应该出在这
+              //💔
+              // 解决方法看02-deploy-random-ipfs.js:66
               await vrfCoordinatorV2Mock.fulfillRandomWords(
                 requestNftReceipt.events[1].args.requestId,
                 randomIpfsNft.address
               );
-              //💔
             } catch (e) {
               console.error(e);
               reject(e);

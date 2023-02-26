@@ -26,6 +26,9 @@ const metadataTemlate = {
   },
 };
 
+// 模拟的费用,注意费用要够,比如0.01ETH就不行
+const VRF_MOCKS_MINTFEE_AMOUNT = ethers.utils.parseEther("1");
+
 module.exports = async function (hre) {
   const { getNamedAccounts, deployments } = hre;
   const { deploy, log } = deployments;
@@ -60,6 +63,12 @@ module.exports = async function (hre) {
     const tx = await vrfCoordinatorV2Mock.createSubscription();
     const txReceipt = await tx.wait(1);
     subscriptionId = txReceipt.events[0].args.subId;
+    // 要为模拟提供费用,不然测试会出现报错:
+    // VM Exception while processing transaction: reverted with custom error 'InsufficientBalance()'
+    await vrfCoordinatorV2Mock.fundSubscription(
+      subscriptionId,
+      VRF_MOCKS_MINTFEE_AMOUNT
+    );
   } else {
     vrfCoordinatorV2Address = networkConfig[chainId].vrfCoordinatorV2;
     subscriptionId = networkConfig[chainId].subscriptionId;
@@ -114,7 +123,7 @@ async function handleTokenUris() {
     imagesLocation
   );
   // 将返回数据编写进元数据,并上传
-  for (imageUploadResponsesIndex in imageUploadResponses) {
+  for (let imageUploadResponsesIndex in imageUploadResponses) {
     // 编写元数据
     let tokenUrisMetadata = { ...metadataTemlate };
     tokenUrisMetadata.name = files[imageUploadResponsesIndex].replace(
