@@ -46,8 +46,8 @@ module.exports = async function (hre) {
   // 获得NFT图像的IPFS哈希值
   // 存储方式:
   // 1.通过本地的IPFS节点,
-  // 2.通过pinata,让至少另一个节点获得,
-  // 3.通过nft.storage挂到filcoin的链上存储
+  // 2.通过pinata,让至少另一个节点获得, (便宜,但只是存在于ipfs节点上)
+  // 3.通过转为svg形式和nft.storage挂到链上存储 () (贵,但是可以存储到链上)
   if (process.env.UPLOAD_TO_PINATA == "true") {
     tokenUris = await handleTokenUris();
   }
