@@ -12,6 +12,9 @@ import "base64-sol/base64.sol";
 // 导入@chainlink/contracts包内的AggregatorV3Interface.sol,来查询汇率价格
 import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
 
+// 定义对应ID的令牌已存在提示错误
+error ERC721Metadata__URI_QueryFor_NonExistentToken();
+
 contract DynamicSvgNft is ERC721 {
     // 下方部分步骤与BasicNft.sol同
     uint256 private s_tokenCounter;
@@ -75,16 +78,18 @@ contract DynamicSvgNft is ERC721 {
     function tokenURI(
         uint256 tokenId
     ) public view override returns (string memory) {
-        // ERC721提供_exists(),查询对应ID的令牌是否存在
-        require(_exists(tokenId), "URI Query for nonexistent token");
+        // ERC721提供_exists(),查询对应ID的令牌是否存在,已存在则提示错误
+        if (!_exists(tokenId)) {
+            revert ERC721Metadata__URI_QueryFor_NonExistentToken();
+        }
 
         // 定义导入图像URI:
         // 解构AggregatorV3Interface对象,获得最新汇率价格信息
         (, int256 price, , , ) = i_priceFeed.latestRoundData();
         // 通过当前汇率价格信息变化,控制NFT发生变化
         string memory imageURI = i_lowImageURI;
-        // 当价格高于铸造时设定价格时,NFT转换为开心,否则为皱眉
-        if (price > s_tokenIdToHighValue[tokenId]) {
+        // 当价格高于或等于铸造时设定价格时,NFT转换为开心,否则为皱眉
+        if (price >= s_tokenIdToHighValue[tokenId]) {
             imageURI = i_highImageURI;
         }
 
@@ -101,7 +106,7 @@ contract DynamicSvgNft is ERC721 {
                             // ERC721提供name(),查询令牌名称
                             abi.encodePacked(
                                 '{"name":"',
-                                name(), // You can add whatever name here
+                                name(),
                                 '", "description":"An NFT that changes based on the Chainlink Feed", ',
                                 '"attributes": [{"trait_type": "coolness", "value": 100}], "image":"',
                                 imageURI,
