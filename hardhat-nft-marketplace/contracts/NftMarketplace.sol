@@ -22,6 +22,10 @@ error NftMarketplace__PriceNotMet(
     uint256 tokenId,
     uint256 price
 );
+// 定义取款时账户没有钱提示错误
+error NftMarketplace__NoProceeds();
+// 定义取款失败提示错误
+error NftMarketplace__TransferFailed();
 
 contract NftMarketplace is ReentrancyGuard {
     // 定义Listing结构,记录卖家和出售价格
@@ -44,6 +48,13 @@ contract NftMarketplace is ReentrancyGuard {
         address indexed nftAddress,
         uint256 indexed tokenId,
         uint256 price
+    );
+
+    // 定义ItemCanceled事件,当NFT取消挂上市场出售时触发
+    event ItemCanceled(
+        address indexed seller,
+        address indexed nftAddress,
+        uint256 indexed tokenId
     );
 
     // 追踪当前卖家清单
@@ -92,8 +103,6 @@ contract NftMarketplace is ReentrancyGuard {
         }
         _;
     }
-
-    constructor() {}
 
     // 实现listItem(),将NFT挂出来出售
     // 定义为外部函数,使此合约中其他函数不能调用此函数
@@ -147,5 +156,61 @@ contract NftMarketplace is ReentrancyGuard {
         );
         // 触发ItemBought()事件
         emit ItemBought(msg.sender, nftAddress, tokenId, listedItem.price);
+    }
+
+    // 实现cancelListing(),取消挂上市场出售
+    function cancelListing(
+        address nftAddress,
+        uint256 tokenId
+    )
+        external
+        isOwner(nftAddress, tokenId, msg.sender)
+        isListed(nftAddress, tokenId)
+    {
+        delete (s_listings[nftAddress][tokenId]);
+        // 触发ItemCanceled()事件
+        emit ItemCanceled(msg.sender, nftAddress, tokenId);
+    }
+
+    // 实现updateListing(),更新NFT的出售信息(刷新价格等)
+    function updateListing(
+        address nftAddress,
+        uint256 tokenId,
+        uint256 newPrice
+    )
+        external
+        isOwner(nftAddress, tokenId, msg.sender)
+        isListed(nftAddress, tokenId)
+    {
+        s_listings[nftAddress][tokenId].price = newPrice;
+        // 触发ItemListed()事件
+        emit ItemListed(msg.sender, nftAddress, tokenId, newPrice);
+    }
+
+    // 实现withdrawProceeds(),提取账户款
+    function withdrawProceeds() external {
+        uint256 proceeds = s_proceeds[msg.sender];
+        // 当账户上没有钱时,提示错误
+        if (proceeds <= 0) {
+            revert NftMarketplace__NoProceeds();
+        }
+        s_proceeds[msg.sender] = 0;
+        // 向账户打款
+        (bool success, ) = payable(msg.sender).call{value: proceeds}("");
+        if (!success) {
+            revert NftMarketplace__TransferFailed();
+        }
+    }
+
+    // getter()
+    function getListing(
+        address nftAddress,
+        uint256 tokenId
+    ) external view returns (Listing memory) {
+        return s_listings[nftAddress][tokenId];
+    }
+
+    function getProceeds(address seller) external view returns (uint256) {
+        return s_proceeds[seller];
     }
 }
