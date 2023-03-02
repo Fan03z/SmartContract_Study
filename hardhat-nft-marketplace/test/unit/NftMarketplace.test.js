@@ -122,7 +122,65 @@ const { developmentChains } = require("../../helper-hardhat-config");
 
         // 测试updateListing()
         describe("updateListing", () => {
-          it("Test12.", async () => {});
+          it("Test12.必须为拥有者调用且NFT已经挂上市场", async () => {
+            await expect(
+              nftMarketplace.updateListing(basicNft.address, TOKEN_ID, PRICE)
+            ).to.be.revertedWith("NotListed");
+            await nftMarketplace.listItem(basicNft.address, TOKEN_ID, PRICE);
+            nftMarketplace = nftMarketplaceContract.connect(user);
+            await expect(
+              nftMarketplace.updateListing(basicNft.address, TOKEN_ID, PRICE)
+            ).to.be.revertedWith("NotOwner");
+          });
+          it("Test13.更新NFT价格信息", async () => {
+            const updatedPrice = ethers.utils.parseEther("0.2");
+            await nftMarketplace.listItem(basicNft.address, TOKEN_ID, PRICE);
+            expect(
+              await nftMarketplace.updateListing(
+                basicNft.address,
+                TOKEN_ID,
+                updatedPrice
+              )
+            ).to.emit("ItemListed");
+            const listing = await nftMarketplace.getListing(
+              basicNft.address,
+              TOKEN_ID
+            );
+            assert(listing.price.toString() == updatedPrice.toString());
+          });
+        });
+
+        // 测试withdrawProceeds()
+        describe("withdrawProceeds", () => {
+          it("Test14.账户款没钱时提示错误", async () => {
+            await expect(nftMarketplace.withdrawProceeds()).to.be.revertedWith(
+              "NoProceeds"
+            );
+          });
+          it("Test15.提取账户款", async () => {
+            await nftMarketplace.listItem(basicNft.address, TOKEN_ID, PRICE);
+            nftMarketplace = nftMarketplaceContract.connect(user);
+            await nftMarketplace.buyItem(basicNft.address, TOKEN_ID, {
+              value: PRICE,
+            });
+            nftMarketplace = nftMarketplaceContract.connect(deployer);
+
+            const deployerProceedsBefore = await nftMarketplace.getProceeds(
+              deployer.address
+            );
+            const deployerBalanceBefore = await deployer.getBalance();
+            const txResponse = await nftMarketplace.withdrawProceeds();
+            const transactionReceipt = await txResponse.wait(1);
+            // 计算gas花费
+            const { gasUsed, effectiveGasPrice } = transactionReceipt;
+            const gasCost = gasUsed.mul(effectiveGasPrice);
+            const deployerBalanceAfter = await deployer.getBalance();
+
+            assert(
+              deployerBalanceAfter.add(gasCost).toString() ==
+                deployerProceedsBefore.add(deployerBalanceBefore).toString()
+            );
+          });
         });
       });
     });
