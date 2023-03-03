@@ -1,5 +1,5 @@
 {
-  "name": "nextjs-nft-marketplace",
+  "name": "nextjs-nft-marketplace-fcc",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -12,7 +12,6 @@
   },
   "dependencies": {
     "moralis": "^1.5.11",
-    "moralis-v1": "^1.12.0",
     "next": "12.1.5",
     "react": "18.1.0",
     "react-dom": "18.1.0",
@@ -20,11 +19,12 @@
     "web3uikit": "^0.0.133"
   },
   "devDependencies": {
-    "autoprefixer": "^10.4.5",
+    "autoprefixer": "^10.4.13",
     "dotenv": "^16.0.0",
     "eslint": "8.14.0",
     "eslint-config-next": "12.1.5",
-    "postcss": "^8.4.12",
-    "tailwindcss": "^3.0.24"
+    "moralis-v1": "^1.12.0",
+    "postcss": "^8.4.21",
+    "tailwindcss": "^3.2.7"
   }
 }
