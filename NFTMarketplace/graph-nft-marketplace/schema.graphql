@@ -1,0 +1,33 @@
+# 作用: 将合约中的事件映射到数据库中
+type ActiveItem @entity {
+  # id后加上!表示必填
+  id: ID!
+  buyer: Bytes! # address
+  seller: Bytes! # address
+  nftAddress: Bytes! # address
+  tokenId: BigInt!
+  price: BigInt
+}
+
+type ItemListed @entity {
+  id: ID!
+  seller: Bytes! # address
+  nftAddress: Bytes! # address
+  tokenId: BigInt!
+  price: BigInt
+}
+
+type ItemCanceled @entity {
+  id: ID!
+  seller: Bytes! # address
+  nftAddress: Bytes! # address
+  tokenId: BigInt!
+}
+
+type ItemBought @entity {
+  id: ID!
+  buyer: Bytes! # address
+  nftAddress: Bytes! # address
+  tokenId: BigInt!
+  price: BigInt
+}
