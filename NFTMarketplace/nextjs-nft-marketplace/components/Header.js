@@ -1,4 +1,3 @@
-// 在组件库web3uikit中导入组件
 import { ConnectButton } from "web3uikit";
 import Link from "next/link";
 
@@ -7,7 +6,6 @@ export default function Header() {
     <nav className="p-5 border-b-2 flex flex-row justify-between items-center">
       <h1 className="py-4 px-4 font-bold text-3xl">NFT Marketplace</h1>
       <div className="flex flex-row items-center">
-        {/* nextjs提供Link标签锚点 */}
         <Link href="/">
           <a className="mr-4 p-6">Home</a>
         </Link>

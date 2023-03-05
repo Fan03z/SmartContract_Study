@@ -1,30 +1,35 @@
-const { network } = require("hardhat");
-const { developmentChains } = require("../helper-hardhat-config");
+// const { network } = require("hardhat")
+const {
+  developmentChains,
+  VERIFICATION_BLOCK_CONFIRMATIONS,
+} = require("../helper-hardhat-config");
 const { verify } = require("../utils/verify");
 
-module.exports = async (hre) => {
-  const { getNamedAccounts, deployments } = hre;
+module.exports = async ({ getNamedAccounts, deployments }) => {
   const { deploy, log } = deployments;
   const { deployer } = await getNamedAccounts();
+  const waitBlockConfirmations = developmentChains.includes(network.name)
+    ? 1
+    : VERIFICATION_BLOCK_CONFIRMATIONS;
 
-  // 无构造函数,传入空白参数
-  let args = [];
+  log("----------------------------------------------------");
+  const arguments = [];
   const nftMarketplace = await deploy("NftMarketplace", {
     from: deployer,
-    args: args,
+    args: arguments,
     log: true,
-    waitConfirmations: network.config.blockConfirmations || 1,
+    waitConfirmations: waitBlockConfirmations,
   });
 
+  // Verify the deployment
   if (
     !developmentChains.includes(network.name) &&
     process.env.ETHERSCAN_API_KEY
   ) {
-    log("确认中...");
-    await verify(nftMarketplace.address, args);
+    log("Verifying...");
+    await verify(nftMarketplace.address, arguments);
   }
-
-  log("----------------------");
+  log("----------------------------------------------------");
 };
 
 module.exports.tags = ["all", "nftmarketplace"];

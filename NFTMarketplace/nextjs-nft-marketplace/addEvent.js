@@ -1,3 +1,4 @@
+// 定义后端合约事件监听
 const Moralis = require("moralis/node");
 require("dotenv").config();
 const contractAddresses = require("./constants/networkMapping.json");
@@ -13,14 +14,12 @@ async function main() {
   await Moralis.start({ serverUrl, appId, masterKey });
   console.log(`Working with contrat address ${contractAddress}`);
 
-  // 定义后端合约事件监听
   let itemListedOptions = {
     // Moralis understands a local chain is 1337
     chainId: moralisChainId,
     sync_historical: true,
     topic: "ItemListed(address,address,uint256,uint256)",
     address: contractAddress,
-    // 合约中itemListed事件的abi
     abi: {
       anonymous: false,
       inputs: [
@@ -127,7 +126,6 @@ async function main() {
     tableName: "ItemCanceled",
   };
 
-  // 在moralis的云端服务器监听
   const listedResponse = await Moralis.Cloud.run(
     "watchContractEvent",
     itemListedOptions,
