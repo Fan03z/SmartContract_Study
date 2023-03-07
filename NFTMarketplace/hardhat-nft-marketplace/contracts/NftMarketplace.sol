@@ -37,7 +37,7 @@ contract NftMarketplace is ReentrancyGuard {
     // 定义ItemListed事件,当出售列表更新时触发
     event ItemListed(
         address indexed seller,
-        address indexed nftAddressm,
+        address indexed nftAddress,
         uint256 indexed tokenId,
         uint256 price
     );

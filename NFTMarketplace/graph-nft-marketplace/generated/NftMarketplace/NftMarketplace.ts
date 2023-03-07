@@ -7,7 +7,7 @@ import {
   Entity,
   Bytes,
   Address,
-  BigInt,
+  BigInt
 } from "@graphprotocol/graph-ts";
 
 export class ItemBought extends ethereum.Event {
@@ -120,7 +120,7 @@ export class NftMarketplace extends ethereum.SmartContract {
       "getListing(address,uint256):((uint256,address))",
       [
         ethereum.Value.fromAddress(nftAddress),
-        ethereum.Value.fromUnsignedBigInt(tokenId),
+        ethereum.Value.fromUnsignedBigInt(tokenId)
       ]
     );
 
@@ -138,7 +138,7 @@ export class NftMarketplace extends ethereum.SmartContract {
       "getListing(address,uint256):((uint256,address))",
       [
         ethereum.Value.fromAddress(nftAddress),
-        ethereum.Value.fromUnsignedBigInt(tokenId),
+        ethereum.Value.fromUnsignedBigInt(tokenId)
       ]
     );
     if (result.reverted) {
@@ -154,7 +154,7 @@ export class NftMarketplace extends ethereum.SmartContract {
 
   getProceeds(seller: Address): BigInt {
     let result = super.call("getProceeds", "getProceeds(address):(uint256)", [
-      ethereum.Value.fromAddress(seller),
+      ethereum.Value.fromAddress(seller)
     ]);
 
     return result[0].toBigInt();

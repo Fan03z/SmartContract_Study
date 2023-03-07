@@ -64,7 +64,7 @@
     "name": "ItemListed",
     "inputs": [
       { "type": "address", "name": "seller", "indexed": true },
-      { "type": "address", "name": "nftAddressm", "indexed": true },
+      { "type": "address", "name": "nftAddress", "indexed": true },
       { "type": "uint256", "name": "tokenId", "indexed": true },
       { "type": "uint256", "name": "price", "indexed": false }
     ]
