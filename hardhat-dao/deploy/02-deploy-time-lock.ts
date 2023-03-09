@@ -1,0 +1,42 @@
+// 为ts导入类型
+import { HardhatRuntimeEnvironment } from "hardhat/types";
+import { DeployFunction } from "hardhat-deploy/types";
+import verify from "../helper-functions";
+import {
+  networkConfig,
+  developmentChains,
+  MIN_DELAY,
+} from "../helper-hardhat-config";
+// 有时会有一些ts的错误，可以使用@ts-ignore来忽略
+// @ts-ignore
+import { ethers } from "hardhat";
+
+const deployTimeLock: DeployFunction = async function (
+  hre: HardhatRuntimeEnvironment
+) {
+  // @ts-ignore
+  const { getNamedAccounts, deployments, network } = hre;
+  const { deploy, log } = deployments;
+  const { deployer } = await getNamedAccounts();
+
+  log("----------------------------------------------------");
+  log("Deploying TimeLock and waiting for confirmations...");
+
+  const timeLock = await deploy("TimeLock", {
+    from: deployer,
+    args: [MIN_DELAY, [], [], deployer],
+    log: true,
+    waitConfirmations: networkConfig[network.name].blockConfirmations || 1,
+  });
+
+  log(`TimeLock at ${timeLock.address}`);
+
+  if (
+    !developmentChains.includes(network.name) &&
+    process.env.ETHERSCAN_API_KEY
+  ) {
+    await verify(timeLock.address, []);
+  }
+};
+
+export default deployTimeLock;
