@@ -1,6 +1,3 @@
-// 💔测试有些小错,还未处理
-// Error: No Contract deployed with name TimeLock
-
 import {
   GovernorContract,
   GovernanceToken,
@@ -37,6 +34,8 @@ describe("Governor Flow", async () => {
   });
 
   it("Test1.只能管理员调用box.store()", async () => {
+    // revertedWith瞎报错,测试能跑通的
+    // @ts-ignore
     await expect(box.store(55)).to.be.revertedWith(
       "Ownable: caller is not the owner"
     );
